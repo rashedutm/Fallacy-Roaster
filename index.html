@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fallacy Roaster 🔥</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFE600;
+    --red: #FF2D2D;
+    --dark: #1a1a1a;
+    --white: #FFFFFF;
+    --orange: #FF6B00;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Comic Neue', cursive;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='28' font-size='28'>🔥</text></svg>"), auto;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(255,230,0,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255,45,45,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255,107,0,0.05) 0%, transparent 70%);
+    animation: bgPulse 4s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes bgPulse {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    animation: slideDown 0.6s ease;
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .header h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3rem, 10vw, 5rem);
+    color: var(--yellow);
+    letter-spacing: 4px;
+    text-shadow: 
+      4px 4px 0 var(--red),
+      8px 8px 0 rgba(255,45,45,0.3);
+    line-height: 1;
+  }
+
+  .header p {
+    color: rgba(255,255,255,0.7);
+    font-size: 1rem;
+    margin-top: 10px;
+    font-weight: 700;
+  }
+
+  .fire-divider {
+    font-size: 2rem;
+    letter-spacing: 8px;
+    margin: 10px 0;
+    animation: fireAnim 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes fireAnim {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+  }
+
+  /* Card */
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,230,0,0.3);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.8s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card label {
+    display: block;
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .card input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: white;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    outline: none;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  .card input:focus {
+    border-color: var(--yellow);
+    background: rgba(255,230,0,0.08);
+    box-shadow: 0 0 20px rgba(255,230,0,0.2);
+  }
+
+  .card input::placeholder {
+    color: rgba(255,255,255,0.3);
+    font-weight: 400;
+  }
+
+  /* Fallacy grid */
+  .fallacy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .fallacy-btn {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 12px 10px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Comic Neue', cursive;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .fallacy-btn:hover {
+    border-color: var(--yellow);
+    color: var(--yellow);
+    background: rgba(255,230,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .fallacy-btn.selected {
+    background: var(--yellow);
+    border-color: var(--yellow);
+    color: var(--dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255,230,0,0.4);
+  }
+
+  /* Roast button */
+  .roast-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    border: none;
+    border-radius: 14px;
+    padding: 18px;
+    color: white;
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .roast-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--orange), var(--yellow));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .roast-btn:hover::before { opacity: 1; }
+  .roast-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,45,45,0.5); }
+  .roast-btn:active { transform: translateY(0); }
+
+  .roast-btn span { position: relative; z-index: 1; }
+
+  /* Result */
+  .result {
+    display: none;
+    background: rgba(255,230,0,0.05);
+    border: 2px solid var(--yellow);
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 20px;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,230,0,0.05), transparent);
+    pointer-events: none;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .result.show { display: block; }
+
+  .fallacy-badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+  }
+
+  .roast-text {
+    font-size: 1.1rem;
+    color: white;
+    line-height: 1.6;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .roast-text .name-highlight {
+    color: var(--yellow);
+    font-size: 1.2rem;
+  }
+
+  .explanation-box {
+    background: rgba(255,255,255,0.05);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 12px 12px 0;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .explanation-box h4 {
+    color: var(--orange);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .explanation-box p {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .meme-emoji {
+    font-size: 4rem;
+    text-align: center;
+    display: block;
+    margin: 15px 0;
+    animation: bounce 0.5s ease infinite alternate;
+  }
+
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+  }
+
+  .again-btn {
+    width: 100%;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    padding: 14px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .again-btn:hover {
+    border-color: var(--yellow);
+    color: var(--yellow);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.8rem;
+  }
+
+  /* Floating emojis */
+  .floater {
+    position: fixed;
+    font-size: 2rem;
+    pointer-events: none;
+    animation: float linear forwards;
+    z-index: 999;
+  }
+
+  @keyframes float {
+    from { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+    to { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+  }
+
+  @media (max-width: 480px) {
+    .fallacy-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>FALLACY ROASTER</h1>
+    <div class="fire-divider">🔥🔥🔥</div>
+    <p>Roast your friends using LOGIC 😁</p>
+  </div>
+
+  <div class="card">
+    <label>👤 Enter Your Friend's Name</label>
+    <input type="text" id="nameInput" placeholder="e.g. Alyaa, Zaky, Heril..." maxlength="30">
+
+    <label>💥 Choose Your Fallacy Weapon</label>
+    <div class="fallacy-grid" id="fallacyGrid">
+      <button class="fallacy-btn" data-fallacy="ad-hominem">😤 Ad Hominem</button>
+      <button class="fallacy-btn" data-fallacy="appeal-emotion">😭 Appeal to Emotion</button>
+      <button class="fallacy-btn" data-fallacy="bandwagon">🐑 Bandwagon</button>
+      <button class="fallacy-btn" data-fallacy="straw-man">🎭 Straw Man</button>
+      <button class="fallacy-btn" data-fallacy="false-cause">🔗 False Cause</button>
+      <button class="fallacy-btn" data-fallacy="slippery-slope">🎿 Slippery Slope</button>
+      <button class="fallacy-btn" data-fallacy="appeal-authority">👑 Appeal to Authority</button>
+      <button class="fallacy-btn" data-fallacy="circular">🔄 Circular Reasoning</button>
+      <button class="fallacy-btn" data-fallacy="random">🎲 Surprise Me!</button>
+    </div>
+
+    <button class="roast-btn" onclick="generateRoast()">
+      <span>🔥 ROAST THEM 🔥</span>
+    </button>
+  </div>
+
+  <div class="result" id="result">
+    <div class="fallacy-badge" id="fallacyBadge">AD HOMINEM</div>
+    <span class="meme-emoji" id="memeEmoji">💀</span>
+    <div class="roast-text" id="roastText"></div>
+    <div class="explanation-box">
+      <h4>📚 What is this fallacy?</h4>
+      <p id="explanationText"></p>
+    </div>
+    <button class="again-btn" onclick="resetForm()">🔄 Roast Someone Else</button>
+  </div>
+
+  <div class="footer">
+    Made with 💀 for ULRS1102 — Philosophy & Current Issues<br>
+    <small>Educational purposes only... mostly 🫢</small>
+  </div>
+</div>
+
+<script>
+  const fallacyData = {
+    "ad-hominem": {
+      name: "AD HOMINEM",
+      emoji: "😤",
+      explanation: "Ad Hominem (Latin: 'to the person') is a fallacy where someone attacks the character, motive, or personal traits of the person making an argument rather than addressing the argument itself. The person's character is irrelevant to whether their claim is logically valid.",
+      roasts: [
+        (name) => `"{name} says we should eat healthy. But have you SEEN what {name} eats for lunch? Nobody should listen to {name} about anything ever." — Classic Ad Hominem! Instead of debating the idea, we're attacking the person. 💀`,
+        (name) => `"Why would anyone trust {name}'s opinion on the group project? {name} once submitted an assignment late!" — This is pure Ad Hominem. {name}'s past mistake has nothing to do with whether their current idea is good. 😤`,
+        (name) => `"{name} thinks saving money is important, but {name} bought bubble tea yesterday. Hypocrite! Ignore everything {name} says." — Textbook Ad Hominem. Even if {name} drinks bubble tea daily, their financial advice could still be valid. 💸`
+      ]
+    },
+    "appeal-emotion": {
+      name: "APPEAL TO EMOTION",
+      emoji: "😭",
+      explanation: "Appeal to Emotion manipulates people's feelings — fear, pity, or excitement — instead of using logical arguments. It bypasses rational thinking by targeting emotions directly.",
+      roasts: [
+        (name) => `"{name} didn't vote for my idea in the group! Think about how HARD I worked! Don't you feel bad for me?! 😭" — Pure Appeal to Emotion! Whether you feel bad has nothing to do with which idea is actually better. 💀`,
+        (name) => `"If {name} doesn't agree with the group decision, then {name} clearly doesn't care about our friendship at all 😢" — This is emotional manipulation, not a logical argument. {name} can disagree and still care about you. 🎭`,
+        (name) => `"{name} should pay for everyone's food. Think about how hungry we all are! Have some humanity!" — Appeals to pity instead of giving a valid reason why {name} specifically should pay. 😭`
+      ]
+    },
+    "bandwagon": {
+      name: "BANDWAGON FALLACY",
+      emoji: "🐑",
+      explanation: "The Bandwagon Fallacy assumes something is correct or good simply because many people believe or do it. Popularity does not equal truth.",
+      roasts: [
+        (name) => `"{name} should join TikTok. EVERYONE is on TikTok! If {name} isn't on TikTok, what is {name} even doing with their life?!" — Classic Bandwagon! Millions of people doing something doesn't automatically make it the right choice. 🐑`,
+        (name) => `"The whole group voted for this idea so {name} should just agree. Stop being difficult!" — Just because the majority voted doesn't mean the idea is logically the best. Even {name}'s lone disagreement deserves a proper response. 💀`,
+        (name) => `"{name} doesn't drink coffee?! Everyone drinks coffee! Something must be wrong with {name}!" — Bandwagon fallacy at its finest. Popularity of a habit doesn't make it necessary or correct. ☕`
+      ]
+    },
+    "straw-man": {
+      name: "STRAW MAN",
+      emoji: "🎭",
+      explanation: "The Straw Man fallacy misrepresents someone's argument to make it easier to attack. Instead of addressing what they actually said, you attack a distorted version of it.",
+      roasts: [
+        (name) => `"{name} said we should take breaks while studying. So {name} basically wants us to NEVER study and just sleep all day! Typical lazy {name}!" — Classic Straw Man! {name} never said that. You twisted their words to win the argument. 🎭`,
+        (name) => `"{name} suggested we choose a different topic. So basically {name} wants to RUIN the whole project and make everyone fail!" — Nobody said that. {name} just had a different suggestion. Don't twist it! 💀`,
+        (name) => `"{name} said the meeting should be shorter. Oh so {name} doesn't care about the group at all and wants us to fail our assignment?!" — Major Straw Man. Shorter meeting ≠ not caring. 😤`
+      ]
+    },
+    "false-cause": {
+      name: "FALSE CAUSE (Post Hoc)",
+      emoji: "🔗",
+      explanation: "False Cause (also called Post Hoc, Ergo Propter Hoc) wrongly assumes that because one event happened before another, the first event must have caused the second. Correlation does not equal causation.",
+      roasts: [
+        (name) => `"{name} wore a red shirt on the day our group got a bad grade. {name}'s red shirt caused us to fail! {name} is BANNED from wearing red!" — Classic False Cause! The shirt and the grade have zero causal connection. 🔗`,
+        (name) => `"Every time {name} joins the group call, something goes wrong. {name} is obviously cursed and causing all our problems!" — Post Hoc fallacy! {name} joining and things going wrong are coincidences, not cause and effect. 💀`,
+        (name) => `"{name} started drinking coffee this semester and their grades dropped. Coffee is destroying {name}'s academic career!" — False Cause! Many other factors affect grades. Correlation ≠ causation. ☕`
+      ]
+    },
+    "slippery-slope": {
+      name: "SLIPPERY SLOPE",
+      emoji: "🎿",
+      explanation: "Slippery Slope fallacy claims that one event will inevitably lead to a chain of negative consequences, without providing sufficient evidence that this progression will actually occur. It exaggerates the likelihood of extreme outcomes from a single action.",
+      roasts: [
+        (name) => `"{name} skipped ONE class. Next thing you know {name} will skip every class, fail every subject, drop out, and end up living under a bridge. It starts with ONE skip!" — Slippery Slope at its finest. One skip ≠ automatic life destruction. 🎿`,
+        (name) => `"If we let {name} choose the presentation topic this time, then {name} will want to control EVERYTHING and eventually become a dictator of the whole group!" — One decision does not lead to world domination. Calm down. 💀`,
+        (name) => `"{name} bought one expensive drink. Soon {name} will spend ALL their money, go broke, can't pay rent and end up broke forever!" — One bubble tea is not a financial apocalypse. 🧋`
+      ]
+    },
+    "appeal-authority": {
+      name: "APPEAL TO AUTHORITY",
+      emoji: "👑",
+      explanation: "Appeal to Authority (Argumentum ad Verecundiam) uses someone's title or status to justify a claim, even when that person is not a relevant expert on the specific topic being argued. An authority in one field is not automatically an authority in all fields.",
+      roasts: [
+        (name) => `"{name} said our group's idea is good. And {name} is the group leader so it MUST be correct. No need to think further!" — Appeal to Authority! Being a leader doesn't make every opinion automatically correct. Even leaders can be wrong. 👑`,
+        (name) => `"My uncle who is a doctor said {name} is wrong about financial freedom. Case closed!" — Being a doctor doesn't make someone an expert in economics. Different fields, different expertise. 💀`,
+        (name) => `"{name} disagreed with me but I've been at UTM longer than {name}. Therefore I am automatically right!" — Seniority doesn't equal correctness. The argument itself needs to be evaluated. 😤`
+      ]
+    },
+    "circular": {
+      name: "CIRCULAR REASONING",
+      emoji: "🔄",
+      explanation: "Circular Reasoning (also called Begging the Question) occurs when the conclusion of an argument is used as one of its own premises. The argument goes in a circle and provides no real evidence or logical support for the claim.",
+      roasts: [
+        (name) => `"{name} is the smartest person in the group because {name} always makes smart decisions. How do we know they're smart decisions? Because {name} made them!" — Pure Circular Reasoning! You're using the conclusion to prove itself. 🔄`,
+        (name) => `"{name} said this topic is the best topic. Why? Because it's the best. How do you know? Because {name} said so!" — Going in circles! You haven't actually given any real reason why it's the best. 💀`,
+        (name) => `"We should trust {name} because {name} is trustworthy. Why is {name} trustworthy? Because we should trust {name}!" — Classic circular logic. No actual evidence provided, just the same claim repeated in a loop. 🔄`
+      ]
+    }
+  };
+
+  let selectedFallacy = null;
+
+  // Fallacy button selection
+  document.querySelectorAll('.fallacy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.fallacy-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedFallacy = btn.dataset.fallacy;
+    });
+  });
+
+  function generateRoast() {
+    const name = document.getElementById('nameInput').value.trim();
+    
+    if (!name) {
+      shakeInput();
+      return;
+    }
+
+    if (!selectedFallacy) {
+      alert("Pick a fallacy weapon first! 💀");
+      return;
+    }
+
+    let fallacyKey = selectedFallacy;
+    
+    // Random fallacy
+    if (fallacyKey === 'random') {
+      const keys = Object.keys(fallacyData);
+      fallacyKey = keys[Math.floor(Math.random() * keys.length)];
+    }
+
+    const data = fallacyData[fallacyKey];
+    const roastTemplate = data.roasts[Math.floor(Math.random() * data.roasts.length)];
+    const roast = roastTemplate(name).replace(/{name}/g, `<span class="name-highlight">${name}</span>`);
+
+    document.getElementById('fallacyBadge').textContent = data.name;
+    document.getElementById('memeEmoji').textContent = data.emoji + ' 💀 ' + data.emoji;
+    document.getElementById('roastText').innerHTML = roast;
+    document.getElementById('explanationText').textContent = data.explanation;
+
+    const result = document.getElementById('result');
+    result.classList.add('show');
+    result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Launch floating emojis
+    launchEmojis();
+  }
+
+  function shakeInput() {
+    const input = document.getElementById('nameInput');
+    input.style.animation = 'none';
+    input.style.borderColor = '#FF2D2D';
+    input.placeholder = 'Enter a name first! 😤';
+    setTimeout(() => {
+      input.style.borderColor = '';
+      input.placeholder = 'e.g. Alyaa, Zaky, Heril...';
+    }, 2000);
+  }
+
+  function resetForm() {
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('nameInput').value = '';
+    document.querySelectorAll('.fallacy-btn').forEach(b => b.classList.remove('selected'));
+    selectedFallacy = null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function launchEmojis() {
+    const emojis = ['💀', '🔥', '😭', '🤣', '💥', '🎭', '😤'];
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'floater';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = (2 + Math.random() * 2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 4000);
+      }, i * 150);
+    }
+  }
+</script>
+</body>
+</html>
